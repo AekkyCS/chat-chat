@@ -2,10 +2,14 @@ import streamlit as st
 import firebase_admin
 from firebase_admin import credentials, db
 import time
+import json
+
+firebase_config = st.secrets["FIREBASE_SERVICE_ACCOUNT"]
+firebase_credentials = json.loads(firebase_config)
 
 # โหลด Firebase Credentials
 if not firebase_admin._apps:
-    cred = credentials.Certificate("computer-science-34b7a-firebase-adminsdk-az6ze-0a7401a177.json")
+    cred = credentials.Certificate(firebase_credentials)
     firebase_admin.initialize_app(cred, {
         "databaseURL": "https://computer-science-34b7a-default-rtdb.asia-southeast1.firebasedatabase.app/"
     })
