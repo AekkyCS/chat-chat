@@ -34,4 +34,6 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: firebase_key.json
         run: |
-          streamlit run real_time_database.py  # เปลี่ยนจาก `python` เป็น `streamlit run`
+          # เช็คว่ามีการโหลดไฟล์และสร้าง environment variable ได้หรือไม่
+          echo $GOOGLE_APPLICATION_CREDENTIALS
+          python real_time_database.py
