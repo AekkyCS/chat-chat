@@ -5,8 +5,9 @@ import time
 import json
 import os
 
-with open("firebase_key.json") as f:
+with open(os.path.join(os.getenv('GITHUB_WORKSPACE', '.'), 'firebase_key.json')) as f:
     firebase_credentials = json.load(f)
+
     print(firebase_credentials)
 
 # โหลด Firebase Credentials
