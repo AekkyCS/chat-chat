@@ -1,1 +1,39 @@
+name: 🚀 Deploy to Firebase
+
+on:
+  push:
+    branches:
+      - main  # รัน workflow เมื่อ push ไปที่ branch `main`
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔥 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: 📦 Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: 🔑 Set up Firebase credentials
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          echo "$FIREBASE_SERVICE_ACCOUNT" > firebase_key.json
+
+      - name: 🚀 Deploy application
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: firebase_key.json
+        run: |
+          python real_time_database.py
 
