@@ -30,22 +30,51 @@ if not firebase_admin._apps:
 # อ้างอิงไปยัง Firebase Database
 chat_ref = db.reference("/chat_messages")
 
-# ตั้งค่า UI ของ Chat App
 st.title("💬 CS Chat Room")
 username = st.text_input("👤 Your name", key="username")
 
-# แสดงข้อความแชทแบบ Real-time
 st.subheader("📢 Chat room")
+
 def new_func(chat_ref):
     return chat_ref.get()
 
 messages = new_func(chat_ref)
 
-if messages:
-    for key, msg in messages.items():
-        st.write(f"**{msg['username']}**: {msg['message']}")
+st.markdown("""
+    <style>
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+    }
+    .chat-left {
+        background-color: #f1f1f1;
+        padding: 10px;
+        border-radius: 10px;
+        margin: 5px;
+        width: fit-content;
+        max-width: 70%;
+    }
+    .chat-right {
+        background-color: #d1ecf1;
+        padding: 10px;
+        border-radius: 10px;
+        margin: 5px;
+        width: fit-content;
+        max-width: 70%;
+        align-self: flex-end;
+    }
+    </style>
+    ", unsafe_allow_html=True)
 
-# ส่งข้อความ
+if messages:
+    st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+    for key, msg in messages.items():
+        if msg['username'] == username:
+            st.markdown(f'<div class="chat-right"><b>{msg["username"]}</b>: {msg["message"]}</div>', unsafe_allow_html=True)
+        else:
+            st.markdown(f'<div class="chat-left"><b>{msg["username"]}</b>: {msg["message"]}</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
 message = st.text_input("💬 message...", key="message")
 
 if st.button("🚀 send"):
@@ -55,7 +84,7 @@ if st.button("🚀 send"):
             "message": message,
             "timestamp": time.time()
         })
-        st.rerun()  # รีเฟรชหน้าจออัตโนมัติ
+        st.rerun()
     else:
         st.warning("⚠️ Please fill in your name and message before sending!")
 
