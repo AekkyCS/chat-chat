@@ -26,8 +26,9 @@ jobs:
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
-          echo "$FIREBASE_SERVICE_ACCOUNT" > firebase_key.json
-          ls -lah  # ตรวจสอบว่าไฟล์ถูกสร้างขึ้นจริง
+          echo "$FIREBASE_SERVICE_ACCOUNT" > $GITHUB_WORKSPACE/firebase_key.json  # กำหนด path ชัดเจน
+          ls -lah $GITHUB_WORKSPACE  # ตรวจสอบว่าไฟล์ถูกสร้างที่นี่
+
           cat firebase_key.json  # เช็คไฟล์ (ตรวจสอบเนื้อหา)
 
       - name: 🚀 Deploy application
