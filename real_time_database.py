@@ -7,6 +7,7 @@ import os
 
 with open("firebase_key.json") as f:
     firebase_credentials = json.load(f)
+    print(firebase_credentials)
 
 # โหลด Firebase Credentials
 if not firebase_admin._apps:
