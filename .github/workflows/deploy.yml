@@ -29,8 +29,7 @@ jobs:
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
-          echo "$FIREBASE_SERVICE_ACCOUNT" > firebase_key.json
-          cat firebase_key.json  # ตรวจสอบว่าไฟล์ถูกสร้างหรือไม่
+          echo "$FIREBASE_SERVICE_ACCOUNT"
 
       - name: 🚀 Deploy application
         env:
