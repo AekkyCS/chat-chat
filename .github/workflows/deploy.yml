@@ -25,11 +25,13 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: 🔑 Set up Firebase credentials
+            - name: 🔑 Set up Firebase credentials
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
           echo "$FIREBASE_SERVICE_ACCOUNT" > firebase_key.json
+          cat firebase_key.json  # ตรวจสอบว่าถูกสร้างจริง
+
 
       - name: 🚀 Deploy application
         env:
