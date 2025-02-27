@@ -29,66 +29,34 @@ if not firebase_admin._apps:
 
 # อ้างอิงไปยัง Firebase Database
 chat_ref = db.reference("/chat_messages")
-
-st.title("💬 CS Chat Room")
-username = st.text_input("👤 Your name", key="username")
-
-st.subheader("📢 Chat room")
-
-def new_func(chat_ref):
-    return chat_ref.get()
-
-messages = new_func(chat_ref)
-
-st.markdown("""
-    <style>
-    .chat-container {
-        display: flex;
-        flex-direction: column;
-    }
-    .chat-left {
-        background-color: #f1f1f1;
-        padding: 10px;
-        border-radius: 10px;
-        margin: 5px;
-        width: fit-content;
-        max-width: 70%;
-    }
-    .chat-right {
-        background-color: #d1ecf1;
-        padding: 10px;
-        border-radius: 10px;
-        margin: 5px;
-        width: fit-content;
-        max-width: 70%;
-        align-self: flex-end;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
 if messages:
-    st.markdown('<div class="chat-container">', unsafe_allow_html=True)
     for key, msg in messages.items():
-        if msg['username'] == username:
-            st.markdown(f'<div class="chat-right"><b>{msg["username"]}</b>: {msg["message"]}</div>', unsafe_allow_html=True)
+        if msg["username"] == username:
+            # จัดสไตล์ข้อความของผู้ใช้เองให้อยู่ด้านขวาและเป็นสีฟ้า
+            st.markdown(f'<div style="text-align: right; background-color: #D0E8FF; padding: 10px; border-radius: 10px; margin: 5px 0;"> <b>{msg["username"]}</b>: {msg["message"]} </div>', unsafe_allow_html=True)
         else:
-            st.markdown(f'<div class="chat-left"><b>{msg["username"]}</b>: {msg["message"]}</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+            # ข้อความของคนอื่นอยู่ด้านซ้าย
+            st.markdown(f'<div style="text-align: left; background-color: #F0F0F0; padding: 10px; border-radius: 10px; margin: 5px 0;"> <b>{msg["username"]}</b>: {msg["message"]} </div>', unsafe_allow_html=True)
 
+# ส่งข้อความ
 message = st.text_input("💬 message...", key="message")
 
 if st.button("🚀 send"):
     if username and message:
+        chat_ref = db.reference("/chat_messages")
         chat_ref.push({
             "username": username,
             "message": message,
             "timestamp": time.time()
         })
-        st.rerun()
+        st.rerun()  # รีเฟรชหน้าจออัตโนมัติ
     else:
         st.warning("⚠️ Please fill in your name and message before sending!")
 
+# ปุ่มล้างแชท (เฉพาะ user 'aekky')
 if username == "aekky":
     if st.button("🗑️ ล้างแชท"):
+        chat_ref = db.reference("/chat_messages")
         chat_ref.set({})
         st.rerun()
+
