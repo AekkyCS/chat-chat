@@ -5,9 +5,12 @@ import time
 import json
 import os
 
-with open("firebase_key.json") as f:
-    firebase_credentials = json.load(f)
+firebase_key_path = os.path.join(os.getcwd(), "firebase_key.json")
 
+if os.path.exists(firebase_key_path):
+    with open(firebase_key_path) as f:
+        firebase_credentials = json.load(f)
+    print("Firebase credentials loaded successfully.")
 # โหลด Firebase Credentials
 if not firebase_admin._apps:
     cred = credentials.Certificate(firebase_credentials)
