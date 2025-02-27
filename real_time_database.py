@@ -5,12 +5,8 @@ import time
 import json
 import os
 
-firebase_config = os.getenv("FIREBASE_SERVICE_ACCOUNT")
-
-if not firebase_config:
-    raise ValueError("🔥 ERROR: FIREBASE_SERVICE_ACCOUNT is not set!")
-firebase_credentials = json.loads(firebase_config)
-
+with open("firebase_key.json") as f:
+    firebase_credentials = json.load(f)
 
 # โหลด Firebase Credentials
 if not firebase_admin._apps:
