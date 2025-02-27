@@ -5,7 +5,7 @@ import time
 import json
 import os
 
-with open(".github/workflows/firebase_key.json") as f:
+with open("firebase_key.json") as f:
     firebase_credentials = json.load(f)
     print(firebase_credentials)
 
