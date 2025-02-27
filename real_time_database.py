@@ -4,7 +4,7 @@ from firebase_admin import credentials, db
 import time
 import json
 
-firebase_config = st.secrets["FIREBASE_SERVICE_ACCOUNT"]
+firebase_config = os.getenv("FIREBASE_SERVICE_ACCOUNT")
 firebase_credentials = json.loads(firebase_config)
 
 # โหลด Firebase Credentials
