@@ -31,7 +31,7 @@ if not firebase_admin._apps:
 chat_ref = db.reference("/chat_messages")
 
 # ตั้งค่า UI ของ Chat App
-st.title("💬 Real-time Chat App")
+st.title("💬 CS Chat Room")
 username = st.text_input("👤 Your name", key="username")
 
 # แสดงข้อความแชทแบบ Real-time
