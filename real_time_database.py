@@ -3,6 +3,7 @@ import firebase_admin
 from firebase_admin import credentials, db
 import time
 import json
+import os
 
 firebase_config = os.getenv("FIREBASE_SERVICE_ACCOUNT")
 
