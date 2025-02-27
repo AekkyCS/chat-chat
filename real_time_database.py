@@ -27,8 +27,18 @@ if not firebase_admin._apps:
         "databaseURL": "https://computer-science-34b7a-default-rtdb.asia-southeast1.firebasedatabase.app/"
     })
 
-# อ้างอิงไปยัง Firebase Database
-chat_ref = db.reference("/chat_messages")
+# ตั้งค่า UI ของ Chat App
+st.title("💬 CS Chat Room")
+username = st.text_input("👤 Your name", key="username")
+
+# ดึงข้อมูลแชทจาก Firebase
+def get_messages():
+    chat_ref = db.reference("/chat_messages")
+    return chat_ref.get()
+
+messages = get_messages()
+
+st.subheader("📢 Chat room")
 if messages:
     for key, msg in messages.items():
         if msg["username"] == username:
@@ -59,4 +69,3 @@ if username == "aekky":
         chat_ref = db.reference("/chat_messages")
         chat_ref.set({})
         st.rerun()
-
