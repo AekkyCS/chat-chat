@@ -27,7 +27,6 @@ if not firebase_admin._apps:
         "databaseURL": "https://computer-science-34b7a-default-rtdb.asia-southeast1.firebasedatabase.app/"
     })
 
-# ตั้งค่า UI ของ Chat App
 st.title("💬 CS Chat Room")
 username = st.text_input("👤 Your name", key="username")
 
@@ -42,11 +41,11 @@ st.subheader("📢 Chat room")
 if messages:
     for key, msg in messages.items():
         if msg["username"] == username:
-            # จัดสไตล์ข้อความของผู้ใช้เองให้อยู่ด้านขวาและเป็นสีฟ้า
-            st.markdown(f'<div style="text-align: right; background-color: #D0E8FF; padding: 10px; border-radius: 10px; margin: 5px 0;"> <b>{msg["username"]}</b>: {msg["message"]} </div>', unsafe_allow_html=True)
+            # จัดสไตล์ข้อความของผู้ใช้เองให้อยู่ด้านขวาและเป็นสีแดง
+            st.markdown(f'<div style="text-align: right; color: red;"> <b>{msg["username"]}</b>: {msg["message"]} </div>', unsafe_allow_html=True)
         else:
-            # ข้อความของคนอื่นอยู่ด้านซ้าย
-            st.markdown(f'<div style="text-align: left; background-color: #F0F0F0; padding: 10px; border-radius: 10px; margin: 5px 0;"> <b>{msg["username"]}</b>: {msg["message"]} </div>', unsafe_allow_html=True)
+            # ข้อความของคนอื่นแสดงตามปกติ
+            st.write(f"**{msg['username']}**: {msg['message']}")
 
 # ส่งข้อความ
 message = st.text_input("💬 message...", key="message")
@@ -69,3 +68,4 @@ if username == "aekky":
         chat_ref = db.reference("/chat_messages")
         chat_ref.set({})
         st.rerun()
+
