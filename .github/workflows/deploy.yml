@@ -29,10 +29,13 @@ jobs:
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
-          echo "$FIREBASE_SERVICE_ACCOUNT"
+          echo "$FIREBASE_SERVICE_ACCOUNT" > firebase_key.json
+          # ตรวจสอบว่าไฟล์ firebase_key.json ถูกสร้างขึ้นใน directory
+          ls -l  # ตรวจสอบไฟล์ทั้งหมดใน directory
+          cat firebase_key.json  # แสดงเนื้อหาของไฟล์
 
       - name: 🚀 Deploy application
         env:
           GOOGLE_APPLICATION_CREDENTIALS: firebase_key.json
         run: |
-          python real_time_database.py  # รันไฟล์ Python ที่ต้องการ
+          python real_time_database.py  # รันโปรแกรม
