@@ -42,7 +42,7 @@ if messages:
     for key, msg in messages.items():
         if msg["username"] == username:
             # จัดสไตล์ข้อความของผู้ใช้เองให้อยู่ด้านขวาและเป็นสีแดง
-            st.markdown(f'<div style="text-align: right; color: red;"> <b>{msg["username"]}</b>: {msg["message"]} </div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="text-align: right; color: red;">  {msg["message"]} </div>', unsafe_allow_html=True)
         else:
             # ข้อความของคนอื่นแสดงตามปกติ
             st.write(f"**{msg['username']}**: {msg['message']}")
