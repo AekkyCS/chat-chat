@@ -64,7 +64,7 @@ st.markdown("""
         align-self: flex-end;
     }
     </style>
-    ", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 if messages:
     st.markdown('<div class="chat-container">', unsafe_allow_html=True)
