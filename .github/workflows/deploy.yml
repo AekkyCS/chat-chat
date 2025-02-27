@@ -3,9 +3,6 @@ name: 🚀 Deploy to Firebase
 on:
   push:
     branches:
-      - main  # รัน workflow เมื่อ push ไปที่ branch `main`
-  pull_request:
-    branches:
       - main
 
 jobs:
@@ -30,7 +27,8 @@ jobs:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
           echo "$FIREBASE_SERVICE_ACCOUNT" > firebase_key.json
-          cat firebase_key.json  # ตรวจสอบว่าถูกสร้างจริง
+          ls -lah  # ตรวจสอบว่าไฟล์ถูกสร้างขึ้นจริง
+          cat firebase_key.json  # เช็คไฟล์ (ลบออกในโปรดักชัน)
 
       - name: 🚀 Deploy application
         env:
