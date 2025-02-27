@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -26,15 +29,11 @@ jobs:
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
-          echo "$FIREBASE_SERVICE_ACCOUNT" > firebase_key.json  # สร้างไฟล์ที่ root directory
-          ls -lah  # ตรวจสอบว่าไฟล์ถูกสร้างในที่ที่ถูกต้อง
-
-          cat firebase_key.json  # เช็คไฟล์ (ตรวจสอบเนื้อหา)
+          echo "$FIREBASE_SERVICE_ACCOUNT" > firebase_key.json
+          cat firebase_key.json  # ตรวจสอบว่าไฟล์ถูกสร้างหรือไม่
 
       - name: 🚀 Deploy application
         env:
           GOOGLE_APPLICATION_CREDENTIALS: firebase_key.json
         run: |
-          # เช็คว่ามีการโหลดไฟล์และสร้าง environment variable ได้หรือไม่
-          echo $GOOGLE_APPLICATION_CREDENTIALS
-          python real_time_database.py
+          python real_time_database.py  # รันไฟล์ Python ที่ต้องการ
