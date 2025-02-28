@@ -35,17 +35,21 @@ def get_messages():
     chat_ref = db.reference("/chat_messages")
     return chat_ref.get()
 
-messages = get_messages()
-
 st.subheader("📢 Chat room")
-if messages:
-    for key, msg in messages.items():
-        if msg["username"] == username:
-            # จัดสไตล์ข้อความของผู้ใช้เองให้อยู่ด้านขวาและเป็นสีแดง
-            st.markdown(f'<div style="text-align: right; color: red;">  {msg["message"]} </div>', unsafe_allow_html=True)
-        else:
-            # ข้อความของคนอื่นแสดงตามปกติ
-            st.write(f"**{msg['username']}**: {msg['message']}")
+chat_box = st.empty()  # สร้างกล่องแสดงข้อความ
+
+while True:
+    messages = get_messages()
+    with chat_box.container():
+        if messages:
+            for key, msg in messages.items():
+                if msg["username"] == username:
+                    # จัดสไตล์ข้อความของผู้ใช้เองให้อยู่ด้านขวาและเป็นสีแดง
+                    st.markdown(f'<div style="text-align: right; color: red;"> <b>{msg["username"]}</b>: {msg["message"]} </div>', unsafe_allow_html=True)
+                else:
+                    # ข้อความของคนอื่นแสดงตามปกติ
+                    st.write(f"**{msg['username']}**: {msg['message']}")
+    time.sleep(1)  # โหลดข้อความใหม่ทุก 1 วินาที
 
 # ส่งข้อความ
 message = st.text_input("💬 message...", key="message")
@@ -58,7 +62,6 @@ if st.button("🚀 send"):
             "message": message,
             "timestamp": time.time()
         })
-        st.rerun()  # รีเฟรชหน้าจออัตโนมัติ
     else:
         st.warning("⚠️ Please fill in your name and message before sending!")
 
@@ -67,5 +70,3 @@ if username == "aekky":
     if st.button("🗑️ ล้างแชท"):
         chat_ref = db.reference("/chat_messages")
         chat_ref.set({})
-        st.rerun()
-
