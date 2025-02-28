@@ -66,7 +66,7 @@ def send_message():
             "message": st.session_state["message"],
             "timestamp": time.time()
         })
-        st.session_state["message"] = ""  # รีเซ็ตกล่องข้อความ
+        st.session_state.update({"message": ""})  # รีเซ็ตกล่องข้อความ
         st.rerun()
     else:
         st.warning("⚠️ Please fill in your name and message before sending!")
