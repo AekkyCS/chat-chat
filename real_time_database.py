@@ -27,6 +27,7 @@ if not firebase_admin._apps:
         "databaseURL": "https://computer-science-34b7a-default-rtdb.asia-southeast1.firebasedatabase.app/"
     })
 
+# ตั้งค่า UI ของ Chat App
 st.title("💬 CS Chat Room")
 username = st.text_input("👤 Your name", key="username")
 
@@ -38,7 +39,9 @@ def get_messages():
 st.subheader("📢 Chat room")
 chat_box = st.empty()  # สร้างกล่องแสดงข้อความ
 
-while True:
+# โหลดข้อความใหม่ทุก ๆ 1 วินาที
+if "last_refresh" not in st.session_state or time.time() - st.session_state["last_refresh"] > 1:
+    st.session_state["last_refresh"] = time.time()
     messages = get_messages()
     with chat_box.container():
         if messages:
@@ -49,7 +52,7 @@ while True:
                 else:
                     # ข้อความของคนอื่นแสดงตามปกติ
                     st.write(f"**{msg['username']}**: {msg['message']}")
-    time.sleep(1)  # โหลดข้อความใหม่ทุก 1 วินาที
+    st.experimental_rerun()
 
 # ส่งข้อความ
 message = st.text_input("💬 message...", key="message")
@@ -62,6 +65,7 @@ if st.button("🚀 send"):
             "message": message,
             "timestamp": time.time()
         })
+        st.experimental_rerun()
     else:
         st.warning("⚠️ Please fill in your name and message before sending!")
 
@@ -70,3 +74,4 @@ if username == "aekky":
     if st.button("🗑️ ล้างแชท"):
         chat_ref = db.reference("/chat_messages")
         chat_ref.set({})
+        st.experimental_rerun()
