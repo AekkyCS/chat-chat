@@ -28,7 +28,6 @@ if not firebase_admin._apps:
     })
 
 # ตั้งค่า UI ของ Chat App
-# ตั้งค่า UI ของ Chat App
 st.title("💬 CS Chat Room")
 username = st.text_input("👤 Your name", key="username")
 
@@ -56,6 +55,9 @@ if "last_refresh" not in st.session_state or time.time() - st.session_state["las
     st.rerun()
 
 # ส่งข้อความ
+if "message" not in st.session_state:
+    st.session_state["message"] = ""
+
 message = st.text_input("💬 message...", key="message")
 
 if st.button("🚀 send"):
@@ -66,6 +68,7 @@ if st.button("🚀 send"):
             "message": message,
             "timestamp": time.time()
         })
+        st.session_state["message"] = ""  # รีเซ็ตกล่องข้อความให้ว่าง
         st.rerun()
     else:
         st.warning("⚠️ Please fill in your name and message before sending!")
@@ -76,4 +79,3 @@ if username == "aekky":
         chat_ref = db.reference("/chat_messages")
         chat_ref.set({})
         st.rerun()
-
