@@ -66,12 +66,15 @@ def send_message():
             "message": st.session_state["message"],
             "timestamp": time.time()
         })
-        st.session_state.pop("message", None)  # รีเซ็ตข้อความ
+        st.session_state["message"] = ""  # รีเซ็ตกล่องข้อความ
         st.rerun()
     else:
         st.warning("⚠️ Please fill in your name and message before sending!")
 
-message = st.text_input("💬 message...", key="message", on_change=send_message)
+message = st.text_input("💬 message...", key="message")
+
+if st.button("🚀 send"):
+    send_message()
 
 # ปุ่มล้างแชท (เฉพาะ user 'aekky')
 if username == "aekky":
