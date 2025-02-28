@@ -27,6 +27,7 @@ if not firebase_admin._apps:
         "databaseURL": "https://computer-science-34b7a-default-rtdb.asia-southeast1.firebasedatabase.app/"
     })
 
+
 st.title("💬 CS Chat Room")
 username = st.text_input("👤 Your name", key="username")
 
@@ -52,9 +53,15 @@ if "last_refresh" not in st.session_state or time.time() - st.session_state["las
                     # ข้อความของคนอื่นแสดงตามปกติ
                     st.write(f"**{msg['username']}**: {msg['message']}")
 
+# ตรวจสอบการมีอยู่ของ key "message"
+if "message" not in st.session_state:
+    st.session_state["message"] = ""  # กำหนดค่าเริ่มต้นให้กับ message
+
+message = st.text_input("💬 message...", key="message", value=st.session_state["message"])  # ใช้ value จาก session_state
+
 # ฟังก์ชันส่งข้อความ
 def send_message():
-    if username and "message" in st.session_state and st.session_state["message"]:
+    if username and st.session_state["message"]:
         chat_ref = db.reference("/chat_messages")
         chat_ref.push({
             "username": username,
@@ -62,17 +69,10 @@ def send_message():
             "timestamp": time.time()
         })
         # รีเซ็ตกล่องข้อความหลังจากส่งข้อความ
-        if "message" in st.session_state:
-            st.session_state["message"] = ""  # รีเซ็ตข้อความ
+        st.session_state["message"] = ""  # รีเซ็ตข้อความ
         st.rerun()  # ใช้ rerun หลังจากส่งข้อความ
     else:
         st.warning("⚠️ Please fill in your name and message before sending!")
-
-# ตรวจสอบการมีอยู่ของ key "message"
-if "message" not in st.session_state:
-    st.session_state["message"] = ""  # กำหนดค่าเริ่มต้นให้กับ message
-
-message = st.text_input("💬 message...", key="message")
 
 if st.button("🚀 send"):
     send_message()
