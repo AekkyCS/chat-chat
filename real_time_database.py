@@ -31,7 +31,7 @@ if not firebase_admin._apps:
 st.title("💬 CS Chat Room")
 username = st.text_input("👤 Your name", key="username")
 
-# ดึงข้อมูลแชทจาก Firebase
+# ฟังก์ชันดึงข้อมูลแชทจาก Firebase
 def get_messages():
     chat_ref = db.reference("/chat_messages")
     return chat_ref.get()
@@ -52,12 +52,8 @@ if "last_refresh" not in st.session_state or time.time() - st.session_state["las
                 else:
                     # ข้อความของคนอื่นแสดงตามปกติ
                     st.write(f"**{msg['username']}**: {msg['message']}")
-    st.rerun()
 
 # ฟังก์ชันส่งข้อความ
-if "message" not in st.session_state:
-    st.session_state["message"] = ""
-
 def send_message():
     if username and st.session_state["message"]:
         chat_ref = db.reference("/chat_messages")
@@ -66,8 +62,7 @@ def send_message():
             "message": st.session_state["message"],
             "timestamp": time.time()
         })
-        st.session_state.update({"message": ""})  # รีเซ็ตกล่องข้อความ
-        st.rerun()
+        st.session_state["message"] = ""  # รีเซ็ตกล่องข้อความหลังจากส่งข้อความ
     else:
         st.warning("⚠️ Please fill in your name and message before sending!")
 
@@ -80,5 +75,6 @@ if st.button("🚀 send"):
 if username == "aekky":
     if st.button("🗑️ ล้างแชท"):
         chat_ref = db.reference("/chat_messages")
-        chat_ref.set({})
-        st.rerun()
+        chat_ref.set({})  # ล้างข้อมูลใน Firebase
+        st.session_state["message"] = ""  # รีเซ็ตข้อความ
+        st.rerun()  # ใช้ st.rerun() แทน
