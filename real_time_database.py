@@ -47,30 +47,32 @@ if "last_refresh" not in st.session_state or time.time() - st.session_state["las
         if messages:
             for key, msg in messages.items():
                 if msg["username"] == username:
-                    # จัดสไตล์ข้อความของผู้ใช้เองให้อยู่ด้านขวาและเป็นสีแดง
-                    st.markdown(f'<div style="text-align: right; color: red;"> <b>{msg["username"]}</b>: {msg["message"]} </div>', unsafe_allow_html=True)
+                    st.markdown(
+                        f'<div style="text-align: right; color: red;">'
+                        f'<b>{msg["username"]}</b>: {msg["message"]}</div>',
+                        unsafe_allow_html=True,
+                    )
                 else:
-                    # ข้อความของคนอื่นแสดงตามปกติ
                     st.write(f"**{msg['username']}**: {msg['message']}")
 
-# ตรวจสอบการมีอยู่ของ key "message"
-if "message" not in st.session_state:
-    st.session_state["message"] = ""  # กำหนดค่าเริ่มต้นให้กับ message
+# ใช้ตัวแปร message_key เพื่อสร้าง key แบบไดนามิกสำหรับ text_input
+if "message_key" not in st.session_state:
+    st.session_state["message_key"] = 0
 
-message = st.text_input("💬 message...", key="message", value=st.session_state["message"])  # ใช้ value จาก session_state
+# text_input ใช้ key แบบไดนามิก ทำให้สามารถรีเซ็ต widget ได้
+message = st.text_input("💬 message...", key=f"message_{st.session_state['message_key']}")
 
-# ฟังก์ชันส่งข้อความ
 def send_message():
-    if username and st.session_state["message"]:
+    if username and message:
         chat_ref = db.reference("/chat_messages")
         chat_ref.push({
             "username": username,
-            "message": st.session_state["message"],
+            "message": message,
             "timestamp": time.time()
         })
-        # รีเซ็ตกล่องข้อความหลังจากส่งข้อความ
-        st.session_state["message"] = ""  # รีเซ็ตข้อความ
-        st.rerun()  # ใช้ rerun หลังจากส่งข้อความ
+        # เมื่อส่งข้อความแล้ว เพิ่ม message_key เพื่อรีเซ็ต widget
+        st.session_state["message_key"] += 1
+        st.rerun()  # รีเฟรชแอปเพื่อให้ widget ถูกสร้างใหม่
     else:
         st.warning("⚠️ Please fill in your name and message before sending!")
 
@@ -82,5 +84,5 @@ if username == "aekky":
     if st.button("🗑️ ล้างแชท"):
         chat_ref = db.reference("/chat_messages")
         chat_ref.set({})  # ล้างข้อมูลใน Firebase
-        st.session_state["message"] = ""  # รีเซ็ตข้อความ
+        st.session_state["message_key"] += 1  # เพิ่ม key เพื่อรีเซ็ต widget
         st.rerun()  # รีเฟรชแอปหลังจากล้างข้อมูล
