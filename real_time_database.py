@@ -54,24 +54,24 @@ if "last_refresh" not in st.session_state or time.time() - st.session_state["las
                     st.write(f"**{msg['username']}**: {msg['message']}")
     st.rerun()
 
-# ส่งข้อความ
+# ฟังก์ชันส่งข้อความ
 if "message" not in st.session_state:
     st.session_state["message"] = ""
 
-message = st.text_input("💬 message...", key="message")
-
-if st.button("🚀 send"):
-    if username and message:
+def send_message():
+    if username and st.session_state["message"]:
         chat_ref = db.reference("/chat_messages")
         chat_ref.push({
             "username": username,
-            "message": message,
+            "message": st.session_state["message"],
             "timestamp": time.time()
         })
-        st.session_state["message"] = ""  # รีเซ็ตกล่องข้อความให้ว่าง
+        st.session_state.pop("message", None)  # รีเซ็ตข้อความ
         st.rerun()
     else:
         st.warning("⚠️ Please fill in your name and message before sending!")
+
+message = st.text_input("💬 message...", key="message", on_change=send_message)
 
 # ปุ่มล้างแชท (เฉพาะ user 'aekky')
 if username == "aekky":
